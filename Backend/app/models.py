@@ -1,6 +1,10 @@
-from sqlalchemy import Column, Integer, String,Date
+from sqlalchemy import Column, Integer, String, Date, ForeignKey, Index
 from sqlalchemy.orm import relationship
-from app.database import Base
+from geoalchemy2 import Geometry
+from geoalchemy2.types import Geometry as GEOMETRY
+from shapely.geometry import Point
+from app.database import Base, engine
+
 
 class Crime(Base):
     __tablename__ = 'crimes'
@@ -14,6 +18,8 @@ class Crime(Base):
     area_id = Column(Integer, ForeignKey('areas.id'))
     area = relationship("Area", back_populates="crimes")
 
+Index('idx_crime_area_id', Crime.area_id)
+
 class Area(Base):
     __tablename__ = 'areas'
 
@@ -23,3 +29,8 @@ class Area(Base):
     geometry = Column(Geometry("POLYGON", srid=4326), nullable=False)
 
     crimes = relationship("Crime", back_populates="area")
+
+Index('idx_area_geometry', Area.geometry, postgresql_using='gist')
+
+
+Base.metadata.create_all(bind=engine)
