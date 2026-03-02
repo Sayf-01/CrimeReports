@@ -2,4 +2,5 @@
 Backend/data/Criminels.geojson
 Backend/data/*.geojson
 Backend/data/limites_arrondissements.geojson
+Backend/app/db.env
 

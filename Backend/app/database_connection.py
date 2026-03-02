@@ -1,8 +1,10 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.orm import sessionmaker, declarative_base, Session
+import os
+from dotenv import load_dotenv
 
-# PostgreSQL connection string ( there could be a danger to my password being seen)
-DATABASE_URL = "postgresql+psycopg2://Safadi:CrimeReportPass@localhost:5432/crime_reports"
+load_dotenv()
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 # Create engine (no check_same_thread needed)
 engine = create_engine(
@@ -16,6 +18,13 @@ SessionLocal = sessionmaker(
     autoflush=False,
     bind=engine
 )
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 # Base class for ORM models
 Base = declarative_base()
