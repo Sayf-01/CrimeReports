@@ -1,8 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-# PostgreSQL connection string
-DATABASE_URL = "postgresql+psycopg2://username:password@localhost:5432/crimereports"
+# PostgreSQL connection string ( there could be a danger to my password being seen)
+DATABASE_URL = "postgresql+psycopg2://Safadi:CrimeReportPass@localhost:5432/crime_reports"
 
 # Create engine (no check_same_thread needed)
 engine = create_engine(

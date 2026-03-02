@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from geoalchemy2 import Geometry
 from geoalchemy2.types import Geometry as GEOMETRY
 from shapely.geometry import Point
-from app.database import Base, engine
+from app.database_connection import Base, engine
 
 
 class Crime(Base):
@@ -13,7 +13,7 @@ class Crime(Base):
     Category = Column(String,nullable=False )
     date = Column(Date, nullable=False)
     quart = Column(String, nullable=False)
-    geom = GEOMETRY(Point,4326)
+    geom = GEOMETRY("POINT",4326)
 
     area_id = Column(Integer, ForeignKey('areas.id'))
     area = relationship("Area", back_populates="crimes")
@@ -26,7 +26,7 @@ class Area(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     area_type = Column(String, nullable=False)
-    geometry = Column(Geometry("POLYGON", srid=4326), nullable=False)
+    geometry = Column(Geometry("MULTIPOLYGON", srid=4326), nullable=False)
 
     crimes = relationship("Crime", back_populates="area")
 
